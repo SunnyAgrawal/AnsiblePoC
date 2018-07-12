@@ -2,6 +2,8 @@
 - name: Deploy Rest War
   hosts: 192.168.33.50
   become: true
+  vars:
+    rest_version: 
 
   tasks:
   - name: Shutdown Tomcat
@@ -16,11 +18,11 @@
       
   - name: Create Folder
     file: 
-      path: /tmp/version
+      path: /tmp/"{{ rest_version }}"
       state: directory
       
   - name: Backup old clix-cms-rest war file
-    command: mv clix-cms-rest /tmp/version
+    command: mv clix-cms-rest /tmp/"{{ rest_version }}"
     args:
       chdir:/home/vagrant/apache-tomcat-7.0.90/webapps
       
@@ -30,7 +32,7 @@
       chdir:/home/vagrant/apache-tomcat-7.0.90/webapps
       
   - name: Rename war file
-    command: mv clix-cms-rest-version.war clix-cms-rest.war
+    command: mv clix-cms-rest-"{{ rest_version }}".war clix-cms-rest.war
     args:
       chdir:/home/vagrant/apache-tomcat-7.0.90/webapps
       
