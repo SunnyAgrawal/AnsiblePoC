@@ -1,25 +1,15 @@
 ---
-- name: Install nginx
+- name: Deploy Rest War
   hosts: 192.168.33.50
   become: true
 
   tasks:
-  - name: Add epel-release repo
-    yum:
-      name: epel-release
-      state: present
-
-  - name: Install nginx
-    yum:
-      name: nginx
-      state: present
-
-  - name: Insert Index Page
-    template:
-      src: index.html
-      dest: /usr/share/nginx/html/index.html
-
-  - name: Start NGiNX
-    service:
-      name: nginx
-      state: started
+  - name: Shutdown Tomcat server
+  command: ./shutdown.sh
+  args:
+    chdir: /home/vagrant/apache-tomcat-7.0.90/bin
+    
+  - name: Start Tomcat
+    command: ./startup.sh
+  args:
+    chdir: /home/vagrant/apache-tomcat-7.0.90/bin
