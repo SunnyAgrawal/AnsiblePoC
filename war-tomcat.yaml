@@ -5,11 +5,11 @@
 
   tasks:
   - name: Shutdown Tomcat server
-  command: ./shutdown.sh
-  args:
-    chdir: /home/vagrant/apache-tomcat-7.0.90/bin
+    command: ./shutdown.sh
+    args:
+      chdir: /home/vagrant/apache-tomcat-7.0.90/bin
     
   - name: Start Tomcat
     command: ./startup.sh
-  args:
-    chdir: /home/vagrant/apache-tomcat-7.0.90/bin
+    args:
+      chdir: /home/vagrant/apache-tomcat-7.0.90/bin
