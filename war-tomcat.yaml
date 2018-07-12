@@ -4,7 +4,24 @@
   become: true
 
   tasks:
-  - name: Shutdown Tomcat server
+  - name: Shutdown Tomcat
+    command: ./shutdown.sh
+    args:
+      chdir: /home/vagrant/apache-tomcat-7.0.90/bin
+      
+  - name: Delete old clix-cms-rest folder from webapps
+    file:
+      path: /home/vagrant/apache-tomcat-7.0.90/clix-cms-rest
+      state: absent
+      
+  - name: Backup old clix-cms-rest war file
+  
+  - name: Download war file
+    command: wget <link>
+    args:
+      chdir:/home/vagrant/apache-tomcat-7.0.90/webapps
+      
+  - name: Shutdown Tomcat
     command: ./shutdown.sh
     args:
       chdir: /home/vagrant/apache-tomcat-7.0.90/bin
