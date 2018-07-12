@@ -14,18 +14,26 @@
       path: /home/vagrant/apache-tomcat-7.0.90/clix-cms-rest
       state: absent
       
+  - name: Create Folder
+    file: 
+      path: /tmp/version
+      state: directory
+      
   - name: Backup old clix-cms-rest war file
-  
+    command: mv clix-cms-rest /tmp/version
+    args:
+      chdir:/home/vagrant/apache-tomcat-7.0.90/webapps
+      
   - name: Download war file
     command: wget <link>
     args:
       chdir:/home/vagrant/apache-tomcat-7.0.90/webapps
       
-  - name: Shutdown Tomcat
-    command: ./shutdown.sh
+  - name: Rename war file
+    command: mv clix-cms-rest-version.war clix-cms-rest.war
     args:
-      chdir: /home/vagrant/apache-tomcat-7.0.90/bin
-    
+      chdir:/home/vagrant/apache-tomcat-7.0.90/webapps
+      
   - name: Start Tomcat
     command: ./startup.sh
     args:
