@@ -1,0 +1,27 @@
+---
+- name: Deploy Rest War
+  hosts: 192.168.33.50
+  become: true
+  vars:
+    rest_version: 
+    time: "{{ lookup('pipe', 'date +%Y-%m-%d-%H-%M-%S')}}"
+      
+  - name: Delete old clix-cms-rest folder from webapps
+    file:
+      path: /opt/tomcat/apache-tomcat/webapps/clix-cms-rest
+      state: absent
+      
+  - name: Create Folder
+    file: 
+      path: /tmp/Bkp-"{{ rest_version }}"-"{{ time }}"
+      state: directory
+      
+  - name: Backup old clix-cms-rest war file
+    command: mv clix-cms-rest.war /tmp/Bkp-"{{ rest_version }}"-"{{ time }}"
+    args:
+      chdir:/opt/tomcat/apache-tomcat/webapps
+      
+  - name: Download war file
+    command: wget --no-check-certificate "http://10.106.3.21:8081/repository/cms-SNAPSHOT/com/clix/cms/clix-cms-rest/"{{ rest_version }}"/clix-cms-rest-"{{ rest_version }}".war" -O clix-cms-rest.war -k
+    args:
+      chdir:/opt/tomcat/apache-tomcat/webapps
