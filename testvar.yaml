@@ -19,8 +19,10 @@
       state: directory
  
   - name: Backup old clix-cms-rest war file
-    copy: src=/opt/tomcat/apache-tomcat/webapps/clix-cms-rest.war dest=/tmp/Bkp-{{ rest_version }}-{{ time }}/clix-cms-rest.war
-    failed_when: false
+    copy: 
+      src: /opt/tomcat/apache-tomcat/webapps/clix-cms-rest.war
+      dest: /tmp/Bkp-{{ rest_version }}-{{ time }}/clix-cms-rest.war
+      failed_when: false
     
   - name: Delete old clix-cms-rest.war file from webapps
     file:
@@ -34,10 +36,12 @@
       
   - name: Download war file
     command: wget --no-check-certificate "http://10.106.3.21:8081/repository/cms-SNAPSHOT/com/clix/cms/clix-cms-rest/{{ rest_version }}/clix-cms-rest-{{ rest_version }}.war" -O /opt/tomcat/apache-tomcat/webapps/clix-cms-rest.war -k
-    
+  
   - name: Change access permission of rest war file
-    command: chmod 755 clix-cms-rest.war
-    
+    file:
+      path: /opt/tomcat/apache-tomcat/webapps/clix-cms-rest.war
+      mode: 755
+      
   - name: Start Tomcat
     command: ./startup.sh
     args:
