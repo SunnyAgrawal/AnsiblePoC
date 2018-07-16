@@ -3,7 +3,7 @@
   hosts: 192.168.33.50
   become: true
   vars:
-    rest_version: 0.1
+    rest_version: 0.0.1-SNAPSHOT
     time: "{{ lookup('pipe', 'date +%Y-%m-%d-%H-%M-%S')}}"
   
   tasks:
