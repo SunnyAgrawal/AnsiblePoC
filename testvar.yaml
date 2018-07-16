@@ -35,6 +35,9 @@
   - name: Download war file
     command: wget --no-check-certificate "http://10.106.3.21:8081/repository/cms-SNAPSHOT/com/clix/cms/clix-cms-rest/{{ rest_version }}/clix-cms-rest-{{ rest_version }}.war" -O /opt/tomcat/apache-tomcat/webapps/clix-cms-rest.war -k
     
+  - name: Change access permission of rest war file
+    command: chmod 755 clix-cms-rest.war
+    
   - name: Start Tomcat
     command: ./startup.sh
     args:
