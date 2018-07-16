@@ -15,3 +15,9 @@
     file: 
       path: /tmp/Bkp-{{ rest_version }}-{{ time }}
       state: directory
+      
+  - name: Backup old clix-cms-rest war file
+    command: mv /opt/tomcat/apache-tomcat/webapps/clix-cms-rest.war /tmp/Bkp-{{ rest_version }}-{{ time }}
+    
+  - name: Download war file
+    command: wget --no-check-certificate "http://10.106.3.21:8081/repository/cms-SNAPSHOT/com/clix/cms/clix-cms-rest/{{ rest_version }}/clix-cms-rest-{{ rest_version }}.war" -O /opt/tomcat/apache-tomcat/webapps/clix-cms-rest.war -k
