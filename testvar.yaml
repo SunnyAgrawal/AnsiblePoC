@@ -8,6 +8,11 @@
     time: "{{ lookup('pipe', 'date +%Y%m%d%H%M%S')}}"
     
   tasks:
+  
+  - name: stop tomcat7 service
+    command: "nohup /opt/tomcat/apache-tomcat/bin/shutdown.sh"
+    tags: stoptom
+  
   - name: Shutdown Tomcat
     command: sh shutdown.sh
     args:
@@ -45,8 +50,7 @@
     file:
       path: /opt/tomcat/apache-tomcat/webapps/clix-cms-rest.war
       mode: 755
-      
-  - name: Start Tomcat
-    command: ./startup.sh
-    args:
-      chdir: /opt/tomcat/apache-tomcat/bin
+   
+  - name: start tomcat7 service
+    command: "nohup /opt/tomcat/apache-tomcat/bin/startup.sh"
+    tags: starttom
