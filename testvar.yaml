@@ -4,7 +4,7 @@
   become: true
   vars:
     rest_version: 0.0.1-SNAPSHOT
-    time: "{{ lookup('pipe', 'date +%Y-%m-%d-%H-%M-%S')}}"
+    time: "{{ lookup('pipe', 'date +%Y%m%d%H%M%S')}}"
   tasks:    
   - name: Create Folder
     file: 
