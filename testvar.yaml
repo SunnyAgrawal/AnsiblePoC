@@ -8,7 +8,9 @@
     time: "{{ lookup('pipe', 'date +%Y%m%d%H%M%S')}}"
     
   tasks:
-  
+  - shell : date +%s
+    register: datetime_output
+    
   - name: stop tomcat7 service
     command: "nohup /opt/tomcat/apache-tomcat/bin/shutdown.sh"
     tags: stoptom
@@ -25,12 +27,12 @@
     
   - name: Create Folder
     file: 
-      path: /tmp/Bkp-{{ rest_version }}-{{ time }}
+      path: /tmp/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}
       state: directory
     when: war.stat.exists == true
   
   - name: Backup old clix-cms-rest war file if exist
-    command: mv /opt/tomcat/apache-tomcat/webapps/clix-cms-rest.war /tmp/Bkp-{{ rest_version }}-{{ time }}/clix-cms-rest.war
+    command: mv /opt/tomcat/apache-tomcat/webapps/clix-cms-rest.war /tmp/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}/clix-cms-rest.war
     when: war.stat.exists == true
     
   - name: Delete old clix-cms-rest.war file from webapps
