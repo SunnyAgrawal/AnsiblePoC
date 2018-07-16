@@ -21,7 +21,6 @@
     copy: 
     src: /opt/tomcat/apache-tomcat/webapps/clix-cms-rest.war
     dest: /tmp/Bkp-{{ rest_version }}-{{ time }}/clix-cms-rest.war
-    failed_when: false
     
   - name: Delete old clix-cms-rest.war file from webapps
     file:
