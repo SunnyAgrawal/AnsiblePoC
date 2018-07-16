@@ -24,9 +24,7 @@
     register: war
 
   - name: Backup old clix-cms-rest war file if existCopy the template, if it doesnt exist already
-    copy:
-      src: /opt/tomcat/apache-tomcat/webapps/clix-cms-rest.war
-      dest: /tmp/Bkp-{{ rest_version }}-{{ time }}/clix-cms-rest.war
+    command: mv /opt/tomcat/apache-tomcat/webapps/clix-cms-rest.war /tmp/Bkp-{{ rest_version }}-{{ time }}/clix-cms-rest.war
     when: war.stat.exists == true 
     
   - name: Delete old clix-cms-rest.war file from webapps
