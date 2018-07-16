@@ -9,34 +9,29 @@
   - name: Shutdown Tomcat
     command: ./shutdown.sh
     args:
-      chdir: /home/vagrant/apache-tomcat-7.0.90/bin
+      chdir: /opt/tomcat/apache-tomcat/bin
       
   - name: Delete old clix-cms-rest folder from webapps
     file:
-      path: /home/vagrant/apache-tomcat-7.0.90/clix-cms-rest
+      path: /opt/tomcat/apache-tomcat/webapps/clix-cms-rest
       state: absent
       
   - name: Create Folder
     file: 
-      path: /tmp/"{{ rest_version }}"
+      path: /tmp/Bkp-"{{ rest_version }}"
       state: directory
       
   - name: Backup old clix-cms-rest war file
-    command: mv clix-cms-rest /tmp/"{{ rest_version }}"
+    command: mv clix-cms-rest.war /tmp/Bkp-"{{ rest_version }}"
     args:
-      chdir:/home/vagrant/apache-tomcat-7.0.90/webapps
+      chdir:/opt/tomcat/apache-tomcat/webapps
       
   - name: Download war file
-    command: wget <link>
+    command: wget --no-check-certificate "http://10.106.3.21:8081/repository/cms-SNAPSHOT/com/clix/cms/clix-cms-rest/{{ rest_version }}/clix-cms-rest-{{ rest_version }}.war" -O clix-cms-rest.war -k
     args:
-      chdir:/home/vagrant/apache-tomcat-7.0.90/webapps
-      
-  - name: Rename war file
-    command: mv clix-cms-rest-"{{ rest_version }}".war clix-cms-rest.war
-    args:
-      chdir:/home/vagrant/apache-tomcat-7.0.90/webapps
+      chdir:/opt/tomcat/apache-tomcat/webapps
       
   - name: Start Tomcat
     command: ./startup.sh
     args:
-      chdir: /home/vagrant/apache-tomcat-7.0.90/bin
+      chdir: /opt/tomcat/apache-tomcat/bin
