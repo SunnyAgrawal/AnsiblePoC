@@ -16,7 +16,7 @@
       path: /tmp/Bkp-{{ rest_version }}-{{ time }}
       state: directory
  
- - name: Backup old clix-cms-rest war file
+  - name: Backup old clix-cms-rest war file
     copy:
       src: /opt/tomcat/apache-tomcat/webapps/clix-cms-rest.war
       dest: /tmp/Bkp-{{ rest_version }}-{{ time }}
