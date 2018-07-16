@@ -4,8 +4,8 @@
   become: true
   vars:
     rest_version: 0.0.1-SNAPSHOT
-      
+  tasks:    
   - name: Create Folder
     file: 
-      path: /tmp/Bkp-"{{ rest_version }}"
+      path: /tmp/Bkp-{{ rest_version }}
       state: directory
