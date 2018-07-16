@@ -12,18 +12,19 @@
     command: ./shutdown.sh
     args:
       chdir: /opt/tomcat/apache-tomcat/bin
-      
-  - name: Create Folder
-    file: 
-      path: /tmp/Bkp-{{ rest_version }}-{{ time }}
-      state: directory
  
   - name: Check if clix-cms-rest.war file exists
     stat:
       path: /opt/tomcat/apache-tomcat/webapps/clix-cms-rest.war
     register: war
-
-  - name: Backup old clix-cms-rest war file if existCopy the template, if it doesnt exist already
+    
+  - name: Create Folder
+    file: 
+      path: /tmp/Bkp-{{ rest_version }}-{{ time }}
+      state: directory
+    when: war.stat.exists == true
+    
+  - name: Backup old clix-cms-rest war file if exist
     command: mv /opt/tomcat/apache-tomcat/webapps/clix-cms-rest.war /tmp/Bkp-{{ rest_version }}-{{ time }}/clix-cms-rest.war
     when: war.stat.exists == true 
     
