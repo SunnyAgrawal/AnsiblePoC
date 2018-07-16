@@ -5,7 +5,8 @@
   vars:
     rest_version: 
     time: "{{ lookup('pipe', 'date +%Y-%m-%d-%H-%M-%S')}}"
-      
+  
+  tasks:
   - name: Delete old clix-cms-rest folder from webapps
     file:
       path: /opt/tomcat/apache-tomcat/webapps/clix-cms-rest
