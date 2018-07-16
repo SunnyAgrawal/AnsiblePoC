@@ -4,8 +4,7 @@
   become: yes
  
   vars:
-    rest_version: 
-    time: "{{ lookup('pipe', 'date +%Y%m%d%H%M%S')}}"
+    rest_version:
     
   tasks:
   - shell : date +%s
@@ -13,12 +12,6 @@
     
   - name: stop tomcat7 service
     command: "nohup /opt/tomcat/apache-tomcat/bin/shutdown.sh"
-    tags: stoptom
-  
-  - name: Shutdown Tomcat
-    command: sh shutdown.sh
-    args:
-      chdir: /opt/tomcat/apache-tomcat/bin
  
   - name: Check if clix-cms-rest.war file exists
     stat:
@@ -55,4 +48,3 @@
    
   - name: start tomcat7 service
     command: "nohup /opt/tomcat/apache-tomcat/bin/startup.sh"
-    tags: starttom
