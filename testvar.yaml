@@ -10,3 +10,5 @@
     file: 
       path: /tmp/Bkp-{{ rest_version }}-{{ time }}
       state: directory
+      args:
+        chdir:/opt/tomcat/apache-tomcat/webapps
