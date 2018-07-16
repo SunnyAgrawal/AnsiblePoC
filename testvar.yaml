@@ -26,7 +26,7 @@
   
   - name: Backup old clix-cms-rest war file if exist
     command: mv /opt/tomcat/apache-tomcat/webapps/clix-cms-rest.war /tmp/Bkp-{{ rest_version }}-{{ time }}/clix-cms-rest.war
-    when: war.stat.exists == true 
+    when: war.stat.exists == true
     
   - name: Delete old clix-cms-rest.war file from webapps
     file:
