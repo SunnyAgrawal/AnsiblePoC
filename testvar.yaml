@@ -1,7 +1,8 @@
 ---
 - name: Deploy Rest War
   hosts: 192.168.33.50
-  
+  become: yes
+ 
   vars:
     rest_version: 
     time: "{{ lookup('pipe', 'date +%Y%m%d%H%M%S')}}"
