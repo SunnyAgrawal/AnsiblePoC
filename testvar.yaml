@@ -7,7 +7,7 @@
     rest_version:
     
   tasks:
-  - shell : date +%s
+  - shell : date '+%Y%m%d%H%M%S'
     register: datetime_output
     
   - name: stop tomcat7 service
