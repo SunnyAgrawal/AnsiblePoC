@@ -20,7 +20,7 @@
     stat:
       path: "{{ tomcat_path }}/webapps/cms.war"
     register: cmswar
-	
+    
   - name: Check if site.war file exists
     stat:
       path: "{{ tomcat_path }}/webapps/site.war"
