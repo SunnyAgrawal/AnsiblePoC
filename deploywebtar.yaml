@@ -49,7 +49,7 @@
     file:
       path: "{{ tomcat_path }}/webapps/cms"
       state: absent
-	  
+      
   - name: Delete old site.war file from webapps
     file:
       path: "{{ tomcat_path }}/webapps/site.war"
@@ -59,7 +59,7 @@
     file:
       path: "{{ tomcat_path }}/webapps/site"
       state: absent
-
+      
   - name: Download tar file
     command: wget --no-check-certificate "http://10.106.3.21:8081/repository/cms-{{ repo_type }}/com/clix/cms/web/{{ web_version }}/web-{{ web_version }}.tar.gz" -O "{{ tomcat_path }}/web.tar.gz" -k
   
@@ -70,15 +70,15 @@
   
   - name: Extract tar file
     command: tar -xvf "{{ tomcat_path }}/web.tar.gz"
-      
+    
   - name: start tomcat7 service
     command: "nohup {{ tomcat_path }}/bin/startup.sh"
-  
+    
   - name: sleep for 60 seconds and continue with play
     wait_for: timeout=60
     
   - shell : ps -ef | awk '/[t]omcat/{print $2}'
     register: tomcat_pid
-  
+    
   - debug: msg="Tomcat is running with PID {{tomcat_pid.stdout}}"
     when: tomcat_pid.stdout != ""
