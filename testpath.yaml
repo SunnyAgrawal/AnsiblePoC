@@ -7,6 +7,8 @@
     rest_version:
     tomcat_path:
     bkp_path:
+    replace_config: false
+    config_version:
     
   tasks:
   - shell : date '+%Y%m%d%H%M%S'
@@ -47,7 +49,31 @@
     file:
       path: "{{ tomcat_path }}/webapps/clix-cms-rest.war"
       mode: 755
-   
+      
+  - name: Check if clix_cms_config.properties file exists
+    stat:
+      path: "{{ tomcat_path }}/conf/clix_cms_config.properties"
+    register: config
+  
+  - name: Create Folder
+    file: 
+      path: "{{ bkp_path }}/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}/conf"
+      state: directory
+    when: 
+      - config.stat.exists == true
+      - replace_config == true
+    
+  - name: Backup old clix_cms_config.properties file if exist
+    command: mv "{{ tomcat_path }}/conf/clix_cms_config.properties" "{{ bkp_path }}/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}/conf/clix_cms_config.properties"
+    when: 
+      - config.stat.exists == true
+      - replace_config == true
+    
+  - name: Download and replace config file
+    command: wget --no-check-certificate "http://10.106.3.21:8081/repository/cms-SNAPSHOT/com/clix/cms/clix_cms_config/{{ config_version }}/clix_cms_config-{{ config_version }}.properties" -O "{{ tomcat_path }}/conf/clix_cms_config.properties" -k
+    when: 
+      - replace_config == true
+      
   - name: start tomcat7 service
     command: "nohup {{ tomcat_path }}/bin/startup.sh"
   
