@@ -7,7 +7,7 @@
     web_version:
     tomcat_path:
     bkp_path:
-	  repo_type:
+    repo_type:
     
   tasks:
   - shell : date '+%Y%m%d%H%M%S'
@@ -15,7 +15,7 @@
     
   - name: stop tomcat7 service
     command: "nohup {{ tomcat_path }}/bin/shutdown.sh"
- 
+    
   - name: Check if cms.war file exists
     stat:
       path: "{{ tomcat_path }}/webapps/cms.war"
