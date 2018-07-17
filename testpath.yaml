@@ -7,7 +7,7 @@
     rest_version:
     tomcat_path:
     bkp_path:
-    replace_config: false
+    replace_config:
     config_version:
     
   tasks:
@@ -77,8 +77,8 @@
   - name: start tomcat7 service
     command: "nohup {{ tomcat_path }}/bin/startup.sh"
   
-  - name: sleep for 100 seconds and continue with play
-    wait_for: timeout=100
+  - name: sleep for 10 seconds and continue with play
+    wait_for: timeout=10
     
   - shell : ps -ef | awk '/[t]omcat/{print $2}'
     register: tomcat_pid
