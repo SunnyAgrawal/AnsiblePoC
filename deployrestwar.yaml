@@ -5,10 +5,11 @@
  
   vars:
     rest_version:
-    tomcat_path:
-    bkp_path:
-    replace_config:
-    config_version:
+    tomcat_path: "/home/clix_user/apache-tomcat-7.0.82"
+    bkp_path: "/home/clix_user/backup/website"
+    replace_config: false
+    config_version: "0.0.1"
+    repo_type: "SNAPSHOT"
     
   tasks:
   - shell : date '+%Y%m%d%H%M%S'
@@ -43,7 +44,7 @@
       state: absent
       
   - name: Download war file
-    command: wget --no-check-certificate "http://10.106.3.21:8081/repository/cms-SNAPSHOT/com/clix/cms/clix-cms-rest/{{ rest_version }}/clix-cms-rest-{{ rest_version }}.war" -O "{{ tomcat_path }}/webapps/clix-cms-rest.war" -k
+    command: wget --no-check-certificate "http://10.106.3.21:8081/repository/cms-{{ repo_type }}/com/clix/cms/clix-cms-rest/{{ rest_version }}/clix-cms-rest-{{ rest_version }}.war" -O "{{ tomcat_path }}/webapps/clix-cms-rest.war" -k
   
   - name: Change access permission of rest war file
     file:
