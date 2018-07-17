@@ -16,7 +16,7 @@
  
   - name: Check if clix-cms-rest.war file exists
     stat:
-      path: "{{ tomcat_path }}"/webapps/clix-cms-rest.war
+      path: {{ tomcat_path }}/webapps/clix-cms-rest.war
     register: war
     
   - name: Create Folder
