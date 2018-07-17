@@ -55,5 +55,5 @@
   - shell : ps -ef | awk '/[t]omcat/{print $2}'
     register: tomcat_pid
   
-  - debug: msg="Tomcat is running with PID : {{tomcat_pid.stdout}}"
+  - debug: msg="Tomcat is running with PID {{tomcat_pid.stdout}}"
     when: tomcat_pid.stdout != ""
