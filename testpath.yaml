@@ -1,0 +1,60 @@
+---
+- name: Deploy Rest War
+  hosts: web_dev
+  become: yes
+ 
+  vars:
+    rest_version:
+    tomcat_path:
+    
+  tasks:
+  - shell : date '+%Y%m%d%H%M%S'
+    register: datetime_output
+    
+  - name: stop tomcat7 service
+    command: "nohup {{ tomcat_path }}/bin/shutdown.sh"
+ 
+  - name: Check if clix-cms-rest.war file exists
+    stat:
+      path: {{ tomcat_path }}/webapps/clix-cms-rest.war
+    register: war
+    
+  - name: Create Folder
+    file: 
+      path: /tmp/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}
+      state: directory
+    when: war.stat.exists == true
+  
+  - name: Backup old clix-cms-rest war file if exist
+    command: mv {{ tomcat_path }}/webapps/clix-cms-rest.war /tmp/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}/clix-cms-rest.war
+    when: war.stat.exists == true
+    
+  - name: Delete old clix-cms-rest.war file from webapps
+    file:
+      path: {{ tomcat_path }}/webapps/clix-cms-rest.war
+      state: absent
+      
+  - name: Delete old clix-cms-rest folder from webapps
+    file:
+      path: {{ tomcat_path }}/webapps/clix-cms-rest
+      state: absent
+      
+  - name: Download war file
+    command: wget --no-check-certificate "http://10.106.3.21:8081/repository/cms-SNAPSHOT/com/clix/cms/clix-cms-rest/{{ rest_version }}/clix-cms-rest-{{ rest_version }}.war" -O {{ tomcat_path }}/webapps/clix-cms-rest.war -k
+  
+  - name: Change access permission of rest war file
+    file:
+      path: {{ tomcat_path }}/webapps/clix-cms-rest.war
+      mode: 755
+   
+  - name: start tomcat7 service
+    command: "nohup {{ tomcat_path }}/bin/startup.sh"
+  
+  - name: sleep for 100 seconds and continue with play
+    wait_for: timeout=100
+    
+  - shell : ps -ef | awk '/[t]omcat/{print $2}'
+    register: tomcat_pid
+  
+  - debug: msg="Tomcat is running with PID {{tomcat_pid.stdout}}"
+    when: tomcat_pid.stdout != ""
