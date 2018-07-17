@@ -48,9 +48,12 @@
    
   - name: start tomcat7 service
     command: "nohup /opt/tomcat/apache-tomcat/bin/startup.sh"
+  
+  - name: sleep for 100 seconds and continue with play
+    wait_for: timeout=100
     
   - shell : ps -ef | awk '/[t]omcat/{print $2}'
     register: tomcat_pid
-    
-  - debug: msg='Tomcat is running with PID :' {{tomcat_pid.stdout}}
+  
+  - debug: msg="Tomcat is running with PID : {{tomcat_pid.stdout}}"
     when: tomcat_pid.stdout != ""
