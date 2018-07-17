@@ -6,6 +6,7 @@
   vars:
     rest_version:
     tomcat_path:
+    bkp_path:
     
   tasks:
   - shell : date '+%Y%m%d%H%M%S'
@@ -21,12 +22,12 @@
     
   - name: Create Folder
     file: 
-      path: /tmp/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}
+      path: "{{ bkp_path }}/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}"
       state: directory
     when: war.stat.exists == true
   
   - name: Backup old clix-cms-rest war file if exist
-    command: mv "{{ tomcat_path }}/webapps/clix-cms-rest.war" /tmp/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}/clix-cms-rest.war
+    command: mv "{{ tomcat_path }}/webapps/clix-cms-rest.war" "{{ bkp_path }}/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}/clix-cms-rest.war"
     when: war.stat.exists == true
     
   - name: Delete old clix-cms-rest.war file from webapps
