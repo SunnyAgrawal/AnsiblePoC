@@ -1,6 +1,6 @@
 ---
 - name: Deploy Web
-  hosts: hippo_dev
+  hosts: web_dev
   become: yes
  
   vars:
