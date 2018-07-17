@@ -26,25 +26,25 @@
     when: war.stat.exists == true
   
   - name: Backup old clix-cms-rest war file if exist
-    command: mv {{ tomcat_path }}/webapps/clix-cms-rest.war /tmp/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}/clix-cms-rest.war
+    command: mv "{{ tomcat_path }}/webapps/clix-cms-rest.war" /tmp/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}/clix-cms-rest.war
     when: war.stat.exists == true
     
   - name: Delete old clix-cms-rest.war file from webapps
     file:
-      path: {{ tomcat_path }}/webapps/clix-cms-rest.war
+      path: "{{ tomcat_path }}/webapps/clix-cms-rest.war"
       state: absent
       
   - name: Delete old clix-cms-rest folder from webapps
     file:
-      path: {{ tomcat_path }}/webapps/clix-cms-rest
+      path: "{{ tomcat_path }}/webapps/clix-cms-rest"
       state: absent
       
   - name: Download war file
-    command: wget --no-check-certificate "http://10.106.3.21:8081/repository/cms-SNAPSHOT/com/clix/cms/clix-cms-rest/{{ rest_version }}/clix-cms-rest-{{ rest_version }}.war" -O {{ tomcat_path }}/webapps/clix-cms-rest.war -k
+    command: wget --no-check-certificate "http://10.106.3.21:8081/repository/cms-SNAPSHOT/com/clix/cms/clix-cms-rest/{{ rest_version }}/clix-cms-rest-{{ rest_version }}.war" -O "{{ tomcat_path }}/webapps/clix-cms-rest.war" -k
   
   - name: Change access permission of rest war file
     file:
-      path: {{ tomcat_path }}/webapps/clix-cms-rest.war
+      path: "{{ tomcat_path }}/webapps/clix-cms-rest.war"
       mode: 755
    
   - name: start tomcat7 service
