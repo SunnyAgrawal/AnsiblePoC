@@ -47,12 +47,6 @@
       
   - name: Download war file
     command: wget --no-check-certificate "http://10.106.3.21:8081/repository/cms-{{ repo_type }}/com/clix/cms/clix-cms-rest/{{ rest_version }}/clix-cms-rest-{{ rest_version }}.war" -O "{{ tomcat_path }}/webapps/clix-cms-rest.war" -k
-  
-  - name: Change access permission of rest war file
-    file:
-      path: "{{ tomcat_path }}/webapps/clix-cms-rest.war"
-      owner: root
-      group: root
       
   - name: Check if clix_cms_config.properties file exists
     stat:
