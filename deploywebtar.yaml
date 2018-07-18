@@ -65,7 +65,8 @@
   - name: Change access permission of web tar file
     file:
       path: "{{ tomcat_path }}/web.tar.gz"
-      mode: 755
+      owner: root
+      group: root
       
   - name: Unarchive a file that is already on the remote machine
     unarchive:
