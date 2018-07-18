@@ -70,7 +70,7 @@
   - name: Unarchive a file that is already on the remote machine
     unarchive:
       src: "{{ tomcat_path }}/web.tar.gz"
-      dest: {{ tomcat_path }}
+      dest: "{{ tomcat_path }}"
       remote_src: yes
       owner: root
       group: root
