@@ -51,7 +51,8 @@
   - name: Change access permission of rest war file
     file:
       path: "{{ tomcat_path }}/webapps/clix-cms-rest.war"
-      mode: 755
+      owner: root
+      group: root
       
   - name: Check if clix_cms_config.properties file exists
     stat:
