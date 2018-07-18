@@ -1,6 +1,6 @@
 ---
 - name: Deploy Rest War
-  hosts: web_dev
+  hosts: '{{ host }}'
   become: yes
  
   vars:
@@ -12,6 +12,8 @@
     repo_type: "SNAPSHOT"
     
   tasks:
+  - debug: msg="Host is {{ ansible_fqdn }}"
+  
   - shell : date '+%Y%m%d%H%M%S'
     register: datetime_output
     
