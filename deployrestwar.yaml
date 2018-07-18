@@ -31,10 +31,8 @@
       state: directory
     when: war.stat.exists == true
   
-  - name: example copying file with owner and permissions
-    copy:
-      src: "{{ tomcat_path }}/webapps/clix-cms-rest.war"
-      dest: "{{ bkp_path }}/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}/clix-cms-rest.war"
+  - name: Backup old clix-cms-rest war file if exist
+    command: mv "{{ tomcat_path }}/webapps/clix-cms-rest.war" "{{ bkp_path }}/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}/clix-cms-rest.war"
     when: war.stat.exists == true
     
   - name: Delete old clix-cms-rest.war file from webapps
