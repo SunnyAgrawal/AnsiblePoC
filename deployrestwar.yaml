@@ -12,7 +12,7 @@
     repo_type: "SNAPSHOT"
     
   tasks:
-  - debug: msg="Host is {{ ansible_fqdn }}"
+  - debug: msg="Host is {{ play_hosts }}"
   
   - shell : date '+%Y%m%d%H%M%S'
     register: datetime_output
