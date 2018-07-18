@@ -1,6 +1,6 @@
 ---
 - name: Deploy Web
-  hosts: web_dev
+  hosts: '{{ host }}'
   become: yes
  
   vars:
@@ -10,6 +10,8 @@
     repo_type:
     
   tasks:
+  - debug: msg="Host is {{ play_hosts }}"
+  
   - shell : date '+%Y%m%d%H%M%S'
     register: datetime_output
     
@@ -60,16 +62,18 @@
       path: "{{ tomcat_path }}/webapps/site"
       state: absent
       
-  - name: Download tar file
-    command: wget --no-check-certificate "http://10.106.3.21:8081/repository/cms-{{ repo_type }}/com/clix/cms/web/{{ web_version }}/web-{{ web_version }}.tar.gz" -O "{{ tomcat_path }}/web.tar.gz" -k
-  
   - name: Change access permission of web tar file
     file:
       path: "{{ tomcat_path }}/web.tar.gz"
       mode: 755
-  
-  - name: Extract tar file
-    command: tar -xvf "{{ tomcat_path }}/web.tar.gz"
+      
+  - name: Unarchive a file that is already on the remote machine
+    unarchive:
+      src: "{{ tomcat_path }}/web.tar.gz"
+      dest: {{ tomcat_path }}
+      remote_src: yes
+      owner: root
+      group: root
     
   - name: start tomcat7 service
     command: "nohup {{ tomcat_path }}/bin/startup.sh"
