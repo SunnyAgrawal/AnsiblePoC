@@ -41,6 +41,33 @@
   - name: Backup old site war file if exist
     command: mv "{{ tomcat_path }}/webapps/site.war" "{{ bkp_path }}/Bkp-{{ web_version }}-{{ datetime_output.stdout }}/site.war"
     when: sitewar.stat.exists == true
+  
+  - name: Check if common folder exists
+    stat:
+      path: "{{ tomcat_path }}/common"
+    register: common_out
+    
+  - name: Backup old common folder if exist
+    command: cp -R "{{ tomcat_path }}/common" "{{ bkp_path }}/Bkp-{{ web_version }}-{{ datetime_output.stdout }}"
+    when: common_out.stat.exists == true
+    
+  - name: Check if shared folder exists
+    stat:
+      path: "{{ tomcat_path }}/shared"
+    register: shared_out
+    
+  - name: Backup old shared folder if exist
+    command: cp -R "{{ tomcat_path }}/shared" "{{ bkp_path }}/Bkp-{{ web_version }}-{{ datetime_output.stdout }}"
+    when: shared_out.stat.exists == true
+  
+  - name: Check if conf folder exists
+    stat:
+      path: "{{ tomcat_path }}/conf"
+    register: conf_out
+    
+  - name: Backup old conf folder if exist
+    command: cp -R "{{ tomcat_path }}/conf" "{{ bkp_path }}/Bkp-{{ web_version }}-{{ datetime_output.stdout }}"
+    when: conf_out.stat.exists == true
     
   - name: Delete old cms.war file from webapps
     file:
