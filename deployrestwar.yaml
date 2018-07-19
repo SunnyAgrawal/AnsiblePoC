@@ -78,7 +78,7 @@
   - name: sleep for 10 seconds and continue with play
     wait_for: timeout=10
     
-  - shell : ps -ef | grep {{ tomcat_path }} | grep java | awk '{print $2}'
+  - shell : ps -ef | grep {{ tomcat_path }} | grep java | awk '/[t]omcat/{print $2}'
     register: tomcat_pid
   
   - debug: msg="Tomcat is running with PID {{tomcat_pid.stdout}}"
