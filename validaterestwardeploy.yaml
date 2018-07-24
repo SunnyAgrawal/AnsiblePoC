@@ -65,5 +65,5 @@
       path: "{{ tomcat_path }}/conf/clix_cms_config.properties"
     register: config
  
- - fail: msg="{{ username_on_the_host.stdout }} doesnot have replace/write access to {{ tomcat_path }}/conf/clix_cms_config.properties file"
+  - fail: msg="{{ username_on_the_host.stdout }} doesnot have replace/write access to {{ tomcat_path }}/conf/clix_cms_config.properties file"
     when: config.stat.pw_name != "{{ username_on_the_host.stdout }}"
