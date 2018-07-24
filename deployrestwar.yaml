@@ -10,7 +10,6 @@
     replace_config: false
     config_version: "0.0.1"
     repo_type: "SNAPSHOT"
-    f_owner: "clix_user"
     
   tasks:
   - debug: msg="Host is {{ play_hosts }}"
@@ -18,21 +17,30 @@
   - shell : date '+%Y%m%d%H%M%S'
     register: datetime_output
     
+  - name: get the username running the deploy
+    local_action: command whoami
+    register: username_on_the_host
+
+  - debug: f_owner=username_on_the_host
+
   - name: Check if tomcat folder/path exists
     stat:
       path: "{{ tomcat_path }}"
-    register: tomcat_out
+    register: tomcat_path_out
     
   - fail: msg="Tomcat path is invalid or tomcat is not present"
-    when: tomcat_out.stat.exists == false
+    when: tomcat_Path_out.stat.exists == false
   
+  - fail: msg="{{ tomcat_path }} doesnot have write access to tomcat folder"
+    when: tomcat_Path_out.stat.wusr == false
+    
   - name: Check if backup folder/path exists
     stat:
       path: "{{ bkp_path }}"
-    register: bkp_out
+    register: bkp_path_out
   
   - fail: msg="Backup path is invalid"
-    when: bkp_out.stat.exists == false
+    when: bkp_path_out.stat.exists == false
     
   - name: Check if clix-cms-rest.war file exists
     stat:
