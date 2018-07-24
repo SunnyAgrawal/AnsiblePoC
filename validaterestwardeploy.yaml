@@ -84,6 +84,5 @@
       
   handlers:
   - name: Check owner
-      fail: msg="{{ username_on_the_host.stdout }} user doen't have permission to delete clix-cms-rest.war file"
-      when: 
-      - war.stat.pw_name != 'root'
+    fail: msg="{{ username_on_the_host.stdout }} user doen't have permission to delete clix-cms-rest.war file"
+    when: war.stat.pw_name != 'root'
