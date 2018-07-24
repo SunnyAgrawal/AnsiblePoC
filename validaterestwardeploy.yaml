@@ -22,7 +22,7 @@
   - fail: msg="Tomcat path {{ tomcat_path }} is invalid. Please provide correct path with tomcat_path parameter"
     when: tomcat_path_out.stat.exists == false
   
-  - fail: msg="{{ username_on_the_host.stdout }} doesnot have write access to {{ tomcat_path }} folder"
+  - fail: msg="username_on_the_host.stdout doesnot have write access to {{ tomcat_path }} folder"
     when: tomcat_path_out.stat.wusr == false
     
   - name: Check if backup folder/path exists
@@ -33,7 +33,7 @@
   - fail: msg="Backup path {{ bkp_path }} is invalid. Please provide correct path with bkp_path parameter"
     when: bkp_path_out.stat.exists == false
     
-  - fail: msg="{{ username_on_the_host.stdout }} doesnot have write access to {{ bkp_path }} folder"
+  - fail: msg="username_on_the_host.stdout doesnot have write access to {{ bkp_path }} folder"
     when: bkp_path_out.stat.wusr == false
     
   - name: Check if clix-cms-rest.war file exists
@@ -41,7 +41,7 @@
       path: "{{ tomcat_path }}/webapps/clix-cms-rest.war"
     register: war
   
-  - fail: msg="{{ username_on_the_host.stdout }} user doen't have permission to delete clix-cms-rest.war file"
+  - fail: msg="username_on_the_host.stdout user doen't have permission to delete clix-cms-rest.war file"
     when: war.stat.pw_name != username_on_the_host.stdout
     
   - name: Check if clix-cms-rest folder exists
