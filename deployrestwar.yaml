@@ -22,6 +22,9 @@
       path: "{{ tomcat_path }}"
     register: tomcat_out
   
+  - fail: msg:"Tomcat path is invalid or tomcat is not present"
+    when: tomcat_out.exists == false
+    
   - debug: msg="Tomcat path is invalid or tomcat is not present"
     when: tomcat_out.isdir is defined and tomcat_out.isdir
   
