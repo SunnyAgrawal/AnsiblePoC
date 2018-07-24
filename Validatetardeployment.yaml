@@ -1,0 +1,97 @@
+---
+- name: Deploy tar validation
+  hosts: '{{ host }}'
+  become: yes
+ 
+  vars:
+    tomcat_path: "/home/clix_user/apache-tomcat-7.0.82"
+    bkp_path: "/home/clix_user/backup/website"
+        
+  tasks:
+  - debug: msg="Host is {{ play_hosts }}"
+    
+  - name: get the username running the deploy
+    local_action: command whoami
+    register: username_on_the_host
+
+  - name: Check if tomcat folder/path exists
+    stat:
+      path: "{{ tomcat_path }}"
+    register: tomcat_path_out
+    
+  - fail: msg="Tomcat path {{ tomcat_path }} is invalid. Please provide correct path with tomcat_path parameter"
+    when: tomcat_path_out.stat.exists == false
+  
+  - fail: msg="{{ username_on_the_host.stdout }} doesnot have write access to {{ tomcat_path }} folder"
+    when: tomcat_path_out.stat.wusr == false
+    
+  - name: Check if backup folder/path exists
+    stat:
+      path: "{{ bkp_path }}"
+    register: bkp_path_out
+  
+  - fail: msg="Backup path {{ bkp_path }} is invalid. Please provide correct path with bkp_path parameter"
+    when: bkp_path_out.stat.exists == false
+    
+  - fail: msg="username_on_the_host.stdout doesnot have write access to {{ bkp_path }} folder"
+    when: bkp_path_out.stat.wusr == false
+    
+  - name: Check if site.war file exists
+    stat:
+      path: "{{ tomcat_path }}/webapps/site.war"
+    register: sitewar
+    
+  - fail: msg="{{ username_on_the_host.stdout }} user doen't have permission to delete site.war file"
+    when: 
+      - sitewar.stat.exists == true
+      - sitewar.stat.pw_name != username_on_the_host.stdout
+  
+  - name: Check if cms.war file exists
+    stat:
+      path: "{{ tomcat_path }}/webapps/cms.war"
+    register: cmswar
+    
+  - fail: msg="{{ username_on_the_host.stdout }} user doen't have permission to delete cms.war file"
+    when: 
+      - cmswar.stat.exists == true
+      - cmswar.stat.pw_name != username_on_the_host.stdout
+    
+  - name: Check if site folder exists
+    stat:
+      path: "{{ tomcat_path }}/webapps/site"
+    register: f_site
+  
+  - fail: msg="{{ username_on_the_host.stdout }} user doen't have permission to delete on site folder"
+    when: 
+      - f_site.stat.exists == true
+      - f_site.stat.pw_name != username_on_the_host.stdout
+      
+  - name: Check if cms folder exists
+    stat:
+      path: "{{ tomcat_path }}/webapps/cms"
+    register: f_cms
+  
+  - fail: msg="{{ username_on_the_host.stdout }} user doen't have permission to delete on cms folder"
+    when: 
+      - f_cms.stat.exists == true
+      - f_cms.stat.pw_name != username_on_the_host.stdout
+  
+  - name: Check if webapps folder permission
+    stat:
+      path: "{{ tomcat_path }}/webapps"
+    register: tomcat_webapps
+    
+  - fail: msg="{{ username_on_the_host.stdout }} doesnot have write access to {{ tomcat_path }}/webapps folder"
+    when: 
+      - tomcat_webapps.stat.exists == true
+      - tomcat_webapps.stat.wusr == false
+        
+  - name: Check if clix_cms_config.properties file exists
+    stat:
+      path: "{{ tomcat_path }}/conf/clix_cms_config.properties"
+    register: config
+ 
+  - fail: msg="{{ username_on_the_host.stdout }} doesnot have replace/write access to {{ tomcat_path }}/conf/clix_cms_config.properties file"
+    when: 
+      - config.stat.exists == true
+      - config.stat.pw_name != username_on_the_host.stdout
