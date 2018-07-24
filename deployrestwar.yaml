@@ -17,9 +17,24 @@
   - shell : date '+%Y%m%d%H%M%S'
     register: datetime_output
     
-  - name: stop tomcat7 service
-    command: "nohup {{ tomcat_path }}/bin/shutdown.sh"
- 
+  - name: Check if tomcat folder/path exists
+    stat:
+      path: "{{ tomcat_path }}"
+    register: tomcat_path_out
+  
+  - name: Check if backup folder/path exists
+    stat:
+      path: "{{ bkp_path }}"
+    register: bkp_path_out
+    
+  - fail:
+      msg: "Tomcat path is invalid or tomcat is not present"
+    when: tomcat_path_out.exists == false
+  
+  - fail:
+      msg: "Please provide valid backup path"
+    when: bkp_path_out.exists == false
+    
   - name: Check if clix-cms-rest.war file exists
     stat:
       path: "{{ tomcat_path }}/webapps/clix-cms-rest.war"
@@ -30,6 +45,9 @@
       path: "{{ bkp_path }}/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}"
       state: directory
     when: war.stat.exists == true
+  
+  - name: stop tomcat7 service
+    command: "nohup {{ tomcat_path }}/bin/shutdown.sh"
   
   - name: Backup old clix-cms-rest war file if exist
     command: mv "{{ tomcat_path }}/webapps/clix-cms-rest.war" "{{ bkp_path }}/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}/clix-cms-rest.war"
