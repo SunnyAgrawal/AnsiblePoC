@@ -10,6 +10,7 @@
     replace_config: false
     config_version: "0.0.1"
     repo_type: "SNAPSHOT"
+    f_owner: "clix_user"
     
   tasks:
   - debug: msg="Host is {{ play_hosts }}"
@@ -30,8 +31,8 @@
       path: "{{ bkp_path }}"
     register: bkp_out
   
-  - debug: msg="Backup path is invalid"
-    when: bkp_out.isdir is defined and bkp_out.isdir
+  - fail: msg="Backup path is invalid"
+    when: bkp_out.stat.exists == false
     
   - name: Check if clix-cms-rest.war file exists
     stat:
