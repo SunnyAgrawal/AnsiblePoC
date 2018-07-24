@@ -22,7 +22,7 @@
       path: "{{ tomcat_path }}"
     register: tomcat_out
   
-  - debug: msg: "Tomcat path is invalid or tomcat is not present"
+  - debug: msg:"Tomcat path is invalid or tomcat is not present"
     when: tomcat_out.isdir is defined and tomcat_out.isdir
   
   - name: Check if backup folder/path exists
@@ -30,7 +30,7 @@
       path: "{{ bkp_path }}"
     register: bkp_out
     
-  - debug: msg: "Tomcat path is invalid or tomcat is not present"
+  - debug: msg:"Tomcat path is invalid or tomcat is not present"
     when: bkp_out.isdir is defined and bkp_out.isdir
     
   - name: Check if clix-cms-rest.war file exists
