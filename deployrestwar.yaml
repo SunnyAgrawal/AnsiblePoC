@@ -23,7 +23,7 @@
     register: tomcat_out
     
   - fail: msg="Tomcat path is invalid or tomcat is not present"
-    when: tomcat_out.exists == false
+    when: tomcat_out.stat.exists == false
   
   - name: Check if backup folder/path exists
     stat:
