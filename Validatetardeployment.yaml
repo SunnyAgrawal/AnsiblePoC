@@ -33,7 +33,7 @@
   - fail: msg="Backup path {{ bkp_path }} is invalid. Please provide correct path with bkp_path parameter"
     when: bkp_path_out.stat.exists == false
     
-  - fail: msg="username_on_the_host.stdout doesnot have write access to {{ bkp_path }} folder"
+  - fail: msg="username_on_the_host.stdout doesnot have write access to {{ bkp_path }} folder to take the backup. Please change the owner of the folder to {{ username_on_the_host.stdout }}"
     when: bkp_path_out.stat.wusr == false
     
   - name: Check if site.war file exists
@@ -41,7 +41,7 @@
       path: "{{ tomcat_path }}/webapps/site.war"
     register: sitewar
     
-  - fail: msg="{{ username_on_the_host.stdout }} user doen't have permission to delete site.war file"
+  - fail: msg="{{ username_on_the_host.stdout }} user doen't have permission to delete site.war file. Please delete using root credentials or change the owner of the file to {{ username_on_the_host.stdout }}"
     when: 
       - sitewar.stat.exists == true
       - sitewar.stat.pw_name != username_on_the_host.stdout
@@ -51,7 +51,7 @@
       path: "{{ tomcat_path }}/webapps/cms.war"
     register: cmswar
     
-  - fail: msg="{{ username_on_the_host.stdout }} user doen't have permission to delete cms.war file"
+  - fail: msg="{{ username_on_the_host.stdout }} user doen't have permission to delete cms.war file. Please delete using root credentials or change the owner of the file to {{ username_on_the_host.stdout }}"
     when: 
       - cmswar.stat.exists == true
       - cmswar.stat.pw_name != username_on_the_host.stdout
@@ -61,7 +61,7 @@
       path: "{{ tomcat_path }}/webapps/site"
     register: f_site
   
-  - fail: msg="{{ username_on_the_host.stdout }} user doen't have permission to delete on site folder"
+  - fail: msg="{{ username_on_the_host.stdout }} user doen't have permission to delete on site folder. Please delete the folder using root credentials or change the owner of the folder to {{ username_on_the_host.stdout }}"
     when: 
       - f_site.stat.exists == true
       - f_site.stat.pw_name != username_on_the_host.stdout
@@ -71,7 +71,7 @@
       path: "{{ tomcat_path }}/webapps/cms"
     register: f_cms
   
-  - fail: msg="{{ username_on_the_host.stdout }} user doen't have permission to delete on cms folder"
+  - fail: msg="{{ username_on_the_host.stdout }} user doen't have permission to delete on cms folder. Please delete the folder using root credentials or change the owner of the folder to {{ username_on_the_host.stdout }}"
     when: 
       - f_cms.stat.exists == true
       - f_cms.stat.pw_name != username_on_the_host.stdout
@@ -81,7 +81,7 @@
       path: "{{ tomcat_path }}/webapps"
     register: tomcat_webapps
     
-  - fail: msg="{{ username_on_the_host.stdout }} doesnot have write access to {{ tomcat_path }}/webapps folder"
+  - fail: msg="{{ username_on_the_host.stdout }} doesnot have write access to {{ tomcat_path }}/webapps folder. Allow write access to {{ username_on_the_host.stdout }} user"
     when: 
       - tomcat_webapps.stat.exists == true
       - tomcat_webapps.stat.wusr == false
@@ -91,7 +91,7 @@
       path: "{{ tomcat_path }}/shared"
     register: shared_out
     
-  - fail: msg="{{ username_on_the_host.stdout }} doesnot have write access to {{ tomcat_path }}/shared folder"
+  - fail: msg="{{ username_on_the_host.stdout }} doesnot have write access to {{ tomcat_path }}/shared folder. Allow write access to {{ username_on_the_host.stdout }} user"
     when: 
       - shared_out.stat.exists == true
       - shared_out.stat.wusr == false
@@ -101,7 +101,7 @@
       path: "{{ tomcat_path }}/common"
     register: common_out
     
-  - fail: msg="{{ username_on_the_host.stdout }} doesnot have write access to {{ tomcat_path }}/common folder"
+  - fail: msg="{{ username_on_the_host.stdout }} doesnot have write access to {{ tomcat_path }}/common folder. Allow write access to {{ username_on_the_host.stdout }} user"
     when: 
       - common_out.stat.exists == true
       - common_out.stat.wusr == false
@@ -111,7 +111,7 @@
       path: "{{ tomcat_path }}/conf"
     register: conf_out
     
-  - fail: msg="{{ username_on_the_host.stdout }} doesnot have write access to {{ tomcat_path }}/conf folder"
+  - fail: msg="{{ username_on_the_host.stdout }} doesnot have write access to {{ tomcat_path }}/conf folder. Allow write access to {{ username_on_the_host.stdout }} user"
     when: 
       - conf_out.stat.exists == true
       - conf_out.stat.wusr == false
