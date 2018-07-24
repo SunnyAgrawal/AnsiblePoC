@@ -2,6 +2,7 @@
 - name: Deploy tar validation
   hosts: '{{ host }}'
   become: yes
+  become_user: vagrant
  
   vars:
     tomcat_path: "/home/clix_user/apache-tomcat-7.0.82"
