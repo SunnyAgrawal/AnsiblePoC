@@ -36,15 +36,21 @@
   - fail: msg="username_on_the_host.stdout doesnot have write access to {{ bkp_path }} folder"
     when: bkp_path_out.stat.wusr == false
     
-  - name: Check if clix-cms-rest.war file exists
+  - name: Get clix-cms-rest.war attributes
     stat:
       path: "{{ tomcat_path }}/webapps/clix-cms-rest.war"
     register: war
   
+  - name: Check if clix-cms-rest.war file exists
+    when: 
+      - war.stat.exists == true
+    notify: 
+      - Check owner
+    
   - fail: msg="{{ username_on_the_host.stdout }} user doen't have permission to delete clix-cms-rest.war file"
     when: 
-      - war.stat.pw_name != 'root'
       - war.stat.exists == true
+      - war.stat.pw_name != 'root'
     
   - name: Check if clix-cms-rest folder exists
     stat:
@@ -75,3 +81,9 @@
     when: 
       - config.stat.exists == true
       - config.stat.pw_name != 'root'
+      
+  handlers:
+  - name: Check owner
+      fail: msg="{{ username_on_the_host.stdout }} user doen't have permission to delete clix-cms-rest.war file"
+      when: 
+      - war.stat.pw_name != 'root'
