@@ -27,10 +27,10 @@
     register: tomcat_path_out
     
   - fail: msg="Tomcat path is invalid or tomcat is not present"
-    when: tomcat_Path_out.stat.exists == false
+    when: tomcat_path_out.stat.exists == false
   
   - fail: msg="{{ username_on_the_host.stdout }} doesnot have write access to tomcat folder"
-    when: tomcat_Path_out.stat.wusr == false
+    when: tomcat_path_out.stat.wusr == false
     
   - name: Check if backup folder/path exists
     stat:
