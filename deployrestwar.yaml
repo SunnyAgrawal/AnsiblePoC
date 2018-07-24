@@ -20,20 +20,20 @@
   - name: Check if tomcat folder/path exists
     stat:
       path: "{{ tomcat_path }}"
-    register: tomcat_path_out
+    register: tomcat_out
   
   - name: Check if backup folder/path exists
     stat:
       path: "{{ bkp_path }}"
-    register: bkp_path_out
+    register: bkp_out
     
   - fail:
       msg: "Tomcat path is invalid or tomcat is not present"
-    when: not tomcat_path_out.exists
+    when: tomcat_out.exists != true
   
   - fail:
       msg: "Please provide valid backup path"
-    when: bkp_path_out.exists != true
+    when: bkp_out.exists != true
     
   - name: Check if clix-cms-rest.war file exists
     stat:
