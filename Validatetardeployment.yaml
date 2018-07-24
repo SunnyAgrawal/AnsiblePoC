@@ -86,12 +86,32 @@
       - tomcat_webapps.stat.exists == true
       - tomcat_webapps.stat.wusr == false
         
-  - name: Check if clix_cms_config.properties file exists
+  - name: Check shared folder permission
     stat:
-      path: "{{ tomcat_path }}/conf/clix_cms_config.properties"
-    register: config
- 
-  - fail: msg="{{ username_on_the_host.stdout }} doesnot have replace/write access to {{ tomcat_path }}/conf/clix_cms_config.properties file"
+      path: "{{ tomcat_path }}/shared"
+    register: shared_out
+    
+  - fail: msg="{{ username_on_the_host.stdout }} doesnot have write access to {{ tomcat_path }}/shared folder"
     when: 
-      - config.stat.exists == true
-      - config.stat.pw_name != username_on_the_host.stdout
+      - shared_out.stat.exists == true
+      - shared_out.stat.wusr == false
+      
+  - name: Check common folder permission
+    stat:
+      path: "{{ tomcat_path }}/common"
+    register: common_out
+    
+  - fail: msg="{{ username_on_the_host.stdout }} doesnot have write access to {{ tomcat_path }}/common folder"
+    when: 
+      - common_out.stat.exists == true
+      - common_out.stat.wusr == false
+      
+  - name: Check conf folder permission
+    stat:
+      path: "{{ tomcat_path }}/conf"
+    register: conf_out
+    
+  - fail: msg="{{ username_on_the_host.stdout }} doesnot have write access to {{ tomcat_path }}/conf folder"
+    when: 
+      - conf_out.stat.exists == true
+      - conf_out.stat.wusr == false
