@@ -44,7 +44,7 @@
   - fail: msg="{{ username_on_the_host.stdout }} user doen't have permission to delete clix-cms-rest.war file"
     when: 
       - war.stat.exists == true
-      - "war.stat.pw_name != {{ username_on_the_host.stdout }}"
+      - war.stat.pw_name != '{{ username_on_the_host.stdout }}'
     
   - name: Check if clix-cms-rest folder exists
     stat:
