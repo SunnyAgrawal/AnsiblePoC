@@ -42,7 +42,9 @@
     register: war
   
   - fail: msg="{{ username_on_the_host.stdout }} user doen't have permission to delete clix-cms-rest.war file"
-    when: war.stat.pw_name != 'root'
+    when: 
+      - war.stat.pw_name != 'root'
+      - war.stat.exists == true
     
   - name: Check if clix-cms-rest folder exists
     stat:
@@ -50,7 +52,9 @@
     register: f_rest
   
   - fail: msg="{{ username_on_the_host.stdout }} user doen't have permission to delete on clix-cms-rest folder"
-    when: f_rest.stat.pw_name != 'root'
+    when: 
+      - f_rest.stat.pw_name != 'root'
+      - f_rest.stat.exists == true
   
   - name: Check if webapps folder permission
     stat:
@@ -58,7 +62,9 @@
     register: tomcat_webapps
     
   - fail: msg="{{ username_on_the_host.stdout }} doesnot have write access to {{ tomcat_path }}/webapps folder"
-    when: tomcat_webapps.stat.wusr == false
+    when: 
+      - tomcat_webapps.stat.wusr == false
+      - tomcat_webapps.stat.exists == true
         
   - name: Check if clix_cms_config.properties file exists
     stat:
