@@ -29,11 +29,11 @@
     
   - fail:
       msg: "Tomcat path is invalid or tomcat is not present"
-    when: tomcat_path_out.exists == false
+    when: not tomcat_path_out.exists
   
   - fail:
       msg: "Please provide valid backup path"
-    when: bkp_path_out.exists == false
+    when: bkp_path_out.exists != true
     
   - name: Check if clix-cms-rest.war file exists
     stat:
