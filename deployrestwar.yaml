@@ -73,7 +73,7 @@
     command: "nohup {{ tomcat_path }}/bin/startup.sh"
   
   - name: sleep for 30 seconds and continue with play
-    wait_for: timeout=30
+    wait_for: timeout=5
     
   - shell : ps aux | grep {{ tomcat_path }} | grep java | awk '{ print $2 }'
     register: tomcat_pid
