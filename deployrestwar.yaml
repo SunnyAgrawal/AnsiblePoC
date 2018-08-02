@@ -78,5 +78,5 @@
   - shell : ps -ef | grep {{ tomcat_path }} | grep java | awk '{print $2}'
     register: tomcat_pid
   
-  - debug: msg="Tomcat is running with PID {{ tomcat_pid.stdout | replace(" ", "") }}"
+  - debug: msg="Tomcat is running with PID {{ tomcat_pid.stdout | replace("\n", "") }}"
     when: tomcat_pid.stdout != ""
