@@ -2,6 +2,7 @@
 - name: Deploy Rest War
   hosts: '{{ host }}'
   become: yes
+  become_user: root
  
   vars:
     rest_version:
