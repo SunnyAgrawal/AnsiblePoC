@@ -5,11 +5,11 @@
  
   vars:
     rest_version:
-    tomcat_path: "/home/clix_user/apache-tomcat-7.0.82"
-    bkp_path: "/home/clix_user/backup/website"
-    replace_config: false
-    config_version: "0.0.1"
-    repo_type: "SNAPSHOT"
+    tomcat_path:
+    bkp_path:
+    replace_config:
+    config_version:
+    repo_type:
     
   tasks:
   - debug: msg="Host is {{ play_hosts }}"
@@ -17,29 +17,9 @@
   - shell : date '+%Y%m%d%H%M%S'
     register: datetime_output
     
-  - name: get the username running the deploy
-    local_action: command whoami
-    register: username_on_the_host
-
-  - name: Check if tomcat folder/path exists
-    stat:
-      path: "{{ tomcat_path }}"
-    register: tomcat_path_out
-    
-  - fail: msg="Tomcat path is invalid or tomcat is not present"
-    when: tomcat_path_out.stat.exists == false
-  
-  - fail: msg="{{ username_on_the_host.stdout }} doesnot have write access to tomcat folder"
-    when: tomcat_path_out.stat.wusr == false
-    
-  - name: Check if backup folder/path exists
-    stat:
-      path: "{{ bkp_path }}"
-    register: bkp_path_out
-  
-  - fail: msg="Backup path is invalid"
-    when: bkp_path_out.stat.exists == false
-    
+  - name: stop tomcat7 service
+    command: "nohup {{ tomcat_path }}/bin/shutdown.sh"
+ 
   - name: Check if clix-cms-rest.war file exists
     stat:
       path: "{{ tomcat_path }}/webapps/clix-cms-rest.war"
@@ -47,15 +27,12 @@
     
   - name: Create Folder
     file: 
-      path: "{{ bkp_path }}/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}"
+      path: "{{ bkp_path }}/cms-rest/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}"
       state: directory
     when: war.stat.exists == true
   
-  - name: stop tomcat7 service
-    command: "nohup {{ tomcat_path }}/bin/shutdown.sh"
-  
   - name: Backup old clix-cms-rest war file if exist
-    command: mv "{{ tomcat_path }}/webapps/clix-cms-rest.war" "{{ bkp_path }}/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}/clix-cms-rest.war"
+    command: cp "{{ tomcat_path }}/webapps/clix-cms-rest.war" "{{ bkp_path }}/cms-rest/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}/clix-cms-rest.war"
     when: war.stat.exists == true
     
   - name: Delete old clix-cms-rest.war file from webapps
@@ -85,24 +62,24 @@
       - replace_config
     
   - name: Backup old clix_cms_config.properties file if exist
-    command: mv "{{ tomcat_path }}/conf/clix_cms_config.properties" "{{ bkp_path }}/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}/conf/clix_cms_config.properties"
+    command: cp "{{ tomcat_path }}/clix/conf/clix_cms_config.properties" "{{ bkp_path }}/Bkp-{{ rest_version }}-{{ datetime_output.stdout }}/clix/conf/clix_cms_config.properties"
     when: 
       - config.stat.exists == true
       - replace_config
     
   - name: Download and replace config file
-    command: wget --no-check-certificate "http://10.106.3.21:8081/repository/cms-RELEASE/com/clix/cms/clix_cms_config/{{ config_version }}/clix_cms_config-{{ config_version }}.properties" -O "{{ tomcat_path }}/conf/clix_cms_config.properties" -k
+    command: wget --no-check-certificate "http://10.106.3.21:8081/repository/cms-RELEASE/com/clix/cms/clix_cms_config/{{ config_version }}/clix_cms_config-{{ config_version }}.properties" -O "{{ tomcat_path }}/clix/conf/clix_cms_config.properties" -k
     when: 
       - replace_config
       
   - name: start tomcat7 service
     command: "nohup {{ tomcat_path }}/bin/startup.sh"
   
-  - name: sleep for 10 seconds and continue with play
-    wait_for: timeout=10
+  - name: sleep for 30 seconds and continue with play
+    wait_for: timeout=30
     
   - shell : ps -ef | grep {{ tomcat_path }} | grep java | awk '{print $2}'
     register: tomcat_pid
   
-  - debug: msg="Tomcat is running with PID {{ tomcat_pid.stdout }}"
+  - debug: msg="Tomcat is running with PID {{tomcat_pid.stdout}}"
     when: tomcat_pid.stdout != ""
