@@ -2,7 +2,6 @@
 - name: Deploy Rest War
   hosts: '{{ host }}'
   become: yes
-  become_user: root
  
   vars:
     rest_version:
@@ -46,9 +45,6 @@
       path: "{{ tomcat_path }}/webapps/clix-cms-rest"
       state: absent
       
-  - name: Download war file
-    command: wget --no-check-certificate "http://10.106.3.21:8081/repository/cms-{{ repo_type }}/com/clix/cms/clix-cms-rest/{{ rest_version }}/clix-cms-rest-{{ rest_version }}.war" -O "{{ tomcat_path }}/webapps/clix-cms-rest.war" -k
-      
   - name: Check if clix_cms_config.properties file exists
     stat:
       path: "{{ tomcat_path }}/conf/clix_cms_config.properties"
@@ -82,5 +78,5 @@
   - shell : ps -ef | grep {{ tomcat_path }} | grep java | awk '{print $2}'
     register: tomcat_pid
   
-  - debug: msg="Tomcat is running with PID {{tomcat_pid.stdout}}"
+  - debug: msg="Tomcat is running with PID {{ tomcat_pid.stdout | replace(" ", "") }}"
     when: tomcat_pid.stdout != ""
