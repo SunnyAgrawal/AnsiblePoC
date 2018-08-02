@@ -2,6 +2,7 @@
 - name: Deploy Rest War
   hosts: '{{ host }}'
   become: yes
+  become_user: root
  
   vars:
     rest_version:
@@ -75,7 +76,7 @@
   - name: sleep for 30 seconds and continue with play
     wait_for: timeout=5
     
-  - shell : ps aux | grep {{ tomcat_path }} | grep java | awk '{ print $2 }'
+  - shell : ps -ef | grep {{ tomcat_path }} | grep java | awk '{print $2}'
     register: tomcat_pid
   
   - debug: msg="Tomcat is running with PID {{ tomcat_pid.stdout }}"
